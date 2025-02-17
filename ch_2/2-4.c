@@ -6,8 +6,7 @@
 
 void squeeze(char *buf, char *buf2, char *squeezed);
 
-int main()
-{
+int main() {
     int c; // char
     int w; // write
     char buf[LIMIT] = {0};
@@ -18,8 +17,7 @@ int main()
     // Copy string we're deleting from to buffer 1
     w = 0;
     c = getchar();
-    while (c != '\n' && w < LIMIT - 1 && c != EOF)
-    {
+    while (c != '\n' && w < LIMIT - 1 && c != EOF) {
         buf[w++] = c;
         c = getchar();
     }
@@ -29,8 +27,7 @@ int main()
     // Copy letters we're deleting from string 1 to buffer 2
     w = 0;
     c = getchar();
-    while (c != '\n' && w < LIMIT - 1 && c != EOF)
-    {
+    while (c != '\n' && w < LIMIT - 1 && c != EOF) {
         buf2[w++] = c;
         c = getchar();
     }
@@ -43,18 +40,14 @@ int main()
     return 0;
 }
 
-void squeeze(char *string, char *chars, char *squeezed)
-{
+void squeeze(char *string, char *chars, char *squeezed) {
     int w_squ = 0;
     int r_str = 0;
 
-    while (string[r_str] != 0)
-    {
+    while (string[r_str] != 0) {
         int r_cha = 0;
-        while (chars[r_cha] != 0)
-        {
-            if (string[r_str] == chars[r_cha])
-            {
+        while (chars[r_cha] != 0) {
+            if (string[r_str] == chars[r_cha]) {
                 // if a char from string matches a char from chars,
                 // break, skip char, and do not write to squeezed buffer
                 break;
@@ -62,8 +55,7 @@ void squeeze(char *string, char *chars, char *squeezed)
             r_cha++;
         }
         // we got to end of chars without a break. append char
-        if (chars[r_cha] == 0)
-        {
+        if (chars[r_cha] == 0) {
             squeezed[w_squ] = string[r_str];
             w_squ++;
         }
