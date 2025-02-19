@@ -5,6 +5,10 @@
 // + p (inclusive) inverted (assuming n < p) leaving other bits unchanged.
 
 int invert(uint32_t x, uint32_t p, uint32_t n) {
+    // How bitmasks work:
+    // 1. 1U is just a fancy way of doing a 1 bit. Take 1U and leftshift it into place. 0s backfill after it,
+    // from right.
+    // 2. Once 1U is in place subtract one from entire thing, which will flip all backfilled 0s to 1s.
     uint32_t mask = ((1U << (p - n + 1)) - 1) << n; // create mask for range n thru p (r to l, inclusive)
     return x ^ mask;                                // XOR to flip bits in range
 }
