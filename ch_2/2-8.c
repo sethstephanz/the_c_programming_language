@@ -22,7 +22,7 @@ void print_binary(uint32_t num) {
 
 int main() {
     uint32_t my_num = 1234567890;
-    uint32_t n = 0; // rotate to the right by 5 positions
+    uint32_t n = 0;
 
     printf("Num before rotation:\t");
     print_binary(my_num);
