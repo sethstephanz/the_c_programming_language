@@ -52,7 +52,7 @@ int bin_search_single_comparison(int target, int arr[], int arr_length) {
 
 int main() {
     int arr[9999] = {0};
-    int target = 54321;
+    int target = 5432;
 
     for (int i = 0; i < 9999; i++) {
         if (i != target) {
