@@ -2,7 +2,8 @@
 
 /*
 Decompose the statement x &= (x - 1):
-1. Because of the nature of binary arithmetic, x - 1 will isolate the rightmost 0 bit:
+1. Because of the nature of binary arithmetic, x - 1 will isolate the rightmost 1 bit while
+flipping the 0s right of it to 1.
 E.g.:
 x =       000111001100100
         - 000000000000001
