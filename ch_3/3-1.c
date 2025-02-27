@@ -5,6 +5,9 @@
 // 3-1: Write a binary search algorithm that only does one comparison within the loop
 // (may have to do additional comparisons outside loop). Measure difference in run time.
 
+// The single comparison algorithm is a bit faster when working with large arrays, but
+// time complexity for both is the same, so will depend on particulars of environment.
+
 int bin_search_double_comparison(int target, int arr[], int arr_length) {
     int l = 0, r = arr_length - 1;
 
@@ -51,10 +54,10 @@ int bin_search_single_comparison(int target, int arr[], int arr_length) {
 }
 
 int main() {
-    int arr[9999] = {0};
-    int target = 5432;
+    int arr[999999] = {0};
+    int target = 54321;
 
-    for (int i = 0; i < 9999; i++) {
+    for (int i = 0; i < 999999; i++) {
         if (i != target) {
             arr[i] = i;
         }
