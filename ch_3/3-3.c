@@ -3,10 +3,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define True 1
+#define False 0
+
 /*
     Write a function that expands list shorthand into full lists.
     For instance, 'a-z' gets expanded into abcd...xyz (full list),
         '1-100' gets expanded into 123...99100.
+
+    Each valid expansion has to be of the form 'x-y', where x < y. Otherwise, print it literally.
+        So, process greedily. If start not set and hit a number or letters, look forward one.
+        If i+1 is not '-', print i and i+1 literally and increment i twice
+        If i = start and i+1 = '-' and i+2 equals something of the same order, and i < i+2, expand and increment
+        i by two. Really trying to not use a stack here!
 
     Handle edge cases like:
         'a-b-z' and '-a-z' (in this case, the '-' would be printed before the expanded list)
@@ -17,57 +26,75 @@
         'a-b-y-a' -> expand a-b. expand c-y. ignore -a if at end, or treat as new start.
 */
 
-char *list_expand(char start, char end) {
-    // working with character version of numeral, so can just treat them
-    // the same way as alpha chars
-    int list_size = end - start + 1; // +1 for null terminator
-    char *new_list = malloc(list_size);
-
-    char my_char = start;
-    for (int i = 0; i < list_size; i++) {
-        new_list[i] = my_char++;
+void expand(char start, char end) {
+    while (start <= end) {
+        printf("%c", start++);
     }
-    new_list[26] = '\0';
-    return new_list;
+    printf("\n");
+    return;
 }
 
 int main() {
-    /*
-        Loop through list.
-        If valid arg found, which has to be of form '
-    */
-    char alpha_start = '\0';
-    char alpha_end = '\0';
-    char num_start = '\0';
-    char num_end = '\0';
+    char my_string[] = "-a-b-za--z-1-9-";
+    char start = '\0';
+    char end = '\0';
 
-    char my_string[] = "a-b-z1-9";
-    // char my_string[] = "-a-b-z-1-9-";
+    int alpha = False;   // alphabetical sequence was just printed
+    int numeric = False; // numeric sequence was just printed
 
-    for (int i = 0; i < strlen(my_string); i++) {
-        printf("%c\n", my_string[i]);
-        if (isalpha(my_string[i]) && !alpha_start) {
-            alpha_start = my_string[i];
-        } else if ((isalpha(my_string[i])) && (alpha_start) && (i > 0) && (my_string[i - 1] == '-') && ((i + 1) > sizeof(my_string) || !isalpha(my_string[i + 1]))) {
-            alpha_end = my_string[i];
-            char *my_list = list_expand(alpha_start, alpha_end);
-            alpha_start = '\0';
-            alpha_end = '\0';
-            printf("%s\n", my_list);
-            free(my_list);
-        } else if (isdigit(my_string[i]) && !num_start) {
-            num_start = my_string[i];
-        } else if (isdigit(my_string[i]) && num_start != '\0' && i > 0 && my_string[i - 1] == '-' && ((i + 1) > sizeof(my_string) || !isalpha(my_string[i + 1]))) {
-            num_end = my_string[i];
-            char *my_list = list_expand(num_start, num_end);
-            num_start = '\0';
-            num_end = '\0';
-            printf("%s\n", my_list);
-            free(my_list);
-        } else if (!num_start && !alpha_start) {
-            printf("%c", my_string[i]);
+    for (int i = 0; i < sizeof(my_string); i++) {
+        if (isalpha(my_string[i])) {
+            if (!start || isnumber(start)) {
+                start = my_string[i];
+            } else if (!end) {
+                // if it's a continuance of kind, skip the last number printed
+                if (alpha) {
+                    if (start < my_string[i])
+                        start++;
+                    else {
+                        // invalid. print vals literally, reset start and end and reset
+                        printf("%c", my_string[i]);
+                        start = '\0';
+                        end = '\0';
+                        continue;
+                    }
+                }
+
+                end = my_string[i];
+                expand(start, end);
+                start = end;
+                end = '\0';
+                alpha = True;
+                numeric = False;
+            }
+        } else if (isnumber(my_string[i])) {
+            if (!start || isalpha(start)) {
+                start = my_string[i];
+            } else if (!end) {
+                if (numeric) {
+                    if (start < my_string[i])
+                        start++;
+                    else {
+                        printf("%c", my_string[i]);
+                        start = '\0';
+                        end = '\0';
+                        continue;
+                    }
+                }
+                end = my_string[i];
+                expand(start, end);
+                numeric = True;
+                start = end;
+                end = '\0';
+                numeric = True;
+                alpha = False;
+            }
+        } else {
+            if (!start) {
+                printf("%c\n", my_string[i]);
+            }
         }
     }
-    printf("\n");
+
     return 0;
 }
